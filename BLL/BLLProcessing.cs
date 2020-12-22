@@ -5,28 +5,114 @@ using System.Linq;
 using System.Text;
 using ProjectLogging;
 using TagLib;
+using File = System.IO.File;
 
 namespace MetaFolderMaker
 {
     public class BLLProcessing
     {
-        //TODO: --2-- may need to go back and revise the ProjectLogging dll to see if i can pass a reference variable through instead
         DebugLogging debug;
         Configuration config;
         List<FileItem> fileItemList = new List<FileItem>();
+        string outputPath;
+        string noArtistPath;
 
         public BLLProcessing(ref Configuration inConfig, ref DebugLogging inDebug)
         {
             config = inConfig;
             debug = inDebug;
+            outputPath = config.Output;
+            noArtistPath = $"{outputPath}\\_NOARTIST";
         }
         public void StartProcessing()
         {
             fileItemList.Clear();
             ScanDirectory();
+            CreateFolders();
+        }
+
+        private void CopyOrMoveFiles(FileItem file, string whatPath)
+        {
+            try
+            {
 
 
-            //FileInfo n = new FileInfo(file);//TODO: --1-- need to use this to move/copy files!
+                switch (config.FileAction)
+                {
+                    case "Move Files":
+                        File.Move(file.FilePath, whatPath);
+                        break;
+                    case "Copy Files":
+                        File.Copy(file.FilePath, whatPath, true);
+                        break;
+                }
+            }
+            catch
+            {
+                throw;
+
+            }
+        }
+
+        private void BuildFolderModifyFiles(FileItem file, string metaDataPulled, string filename)
+        {
+            try
+            {
+
+
+                string newPath = "";
+                string newPathWithFile = "";
+
+                if (metaDataPulled != null)
+                {
+                    newPath = $"{outputPath}\\{metaDataPulled.Trim()}";
+
+                    if (!Directory.Exists(newPath))
+                    {
+                        Directory.CreateDirectory(newPath);
+                    }//Creates a directory if it doesn't exist
+                    newPathWithFile = $"{newPath}\\{filename}";
+                }
+                else
+                {
+                    newPathWithFile = $"{noArtistPath}\\{filename}";
+                }
+                CopyOrMoveFiles(file, newPathWithFile);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        private void CreateFolders()
+        {
+            if (!Directory.Exists(noArtistPath)) { Directory.CreateDirectory(noArtistPath); }
+
+            foreach (FileItem type in fileItemList)
+            {
+                try
+                {
+                    string filename = Path.GetFileName(type.FilePath);
+
+                    switch (config.Tag)
+                    {
+                        case "Artist":
+                            BuildFolderModifyFiles(type, type.MetaData.Artist, filename);
+                            break;
+                        case "Album":
+                            BuildFolderModifyFiles(type, type.MetaData.Album, filename);
+                            break;
+                        case "Title":
+                            BuildFolderModifyFiles(type, type.MetaData.Title, filename);
+                            break;
+                    }
+                }
+                catch (Exception e)
+                {
+                    debug.LogAction($"Error: {e}");
+                }
+            }
 
         }
 
@@ -73,7 +159,8 @@ namespace MetaFolderMaker
                 TagLib.File tagData = TagLib.File.Create(file);
 
                 FileMetaData FileData = new FileMetaData();
-                FileData.Artist = tagData.Tag.FirstAlbumArtist;
+
+                FileData.Artist = tagData.Tag.FirstArtist;
                 FileData.Album = tagData.Tag.Album;
                 FileData.Title = tagData.Tag.Title;
 
