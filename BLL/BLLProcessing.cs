@@ -14,7 +14,6 @@ namespace MetaFolderMaker
         DebugLogging debug;
         Configuration config;
         List<FileItem> fileItemList = new List<FileItem>();
-        //delete this this is a test
 
         public BLLProcessing(ref Configuration inConfig, ref DebugLogging inDebug)
         {
