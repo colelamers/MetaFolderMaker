@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <Reference Include="ProjectLogging">
-      <HintPath>..\ProjectLogging\bin\Debug\netstandard2.0\ProjectLogging.dll</HintPath>
+      <HintPath>B:\Programming\repos\ProjectLogging\bin\Debug\netstandard2.0\ProjectLogging.dll</HintPath>
     </Reference>
     <Reference Include="TagLibSharp">
       <HintPath>B:\Programming\csharplibs\TagLibSharp.dll</HintPath>

@@ -35,8 +35,6 @@ namespace MetaFolderMaker
         {
             try
             {
-
-
                 switch (config.FileAction)
                 {
                     case "Move Files":
@@ -58,8 +56,6 @@ namespace MetaFolderMaker
         {
             try
             {
-
-
                 string newPath = "";
                 string newPathWithFile = "";
 
