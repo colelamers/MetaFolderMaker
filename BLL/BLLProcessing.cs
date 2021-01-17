@@ -9,6 +9,26 @@ using File = System.IO.File;
 
 namespace MetaFolderMaker
 {
+    /*
+     * Created by Cole Lamers 
+     * Date: 2020-12-22
+     * 
+     * == Purpose ==
+     * This code is to make folders based off file metadata and either copy or move them there 
+     * 
+     * Changes: (date,  comment)
+     * 
+     *              
+     */
+
+    /*
+     * == Global Task List ==
+     * TODO: --1-- add each folder name to a dictionary and verify if the full value exists. if it does, do not make a new folder and associate that specific file with the other key-pair. ex: usher - yeah; usher ft. akon - bartender. usher would be in the dictionary, and usher ft. akon would contain that value therefore it would be ignored making a new folder.
+     * TODO: --1-- parse for the first regex of text before a "-" assuming that is the artist name. if (artistname != exist), then search that. if "-" does not exist, then grab whole folder name
+     * 
+     * 
+     * 
+     */
     public class BLLProcessing
     {
         DebugLogging debug;
@@ -145,8 +165,6 @@ namespace MetaFolderMaker
                 debug.LogAction($"Error: {ex}");
             }
         }
-
-        //TODO: --1-- void function that checks config for switch case how it will create folders. then conduct null checks and grab something else?
 
         private void CreateObjectAndFillList(List<string> filesInDirectory)
         {

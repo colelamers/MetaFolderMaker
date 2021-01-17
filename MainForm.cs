@@ -11,15 +11,35 @@ using System.Windows.Forms;
 
 namespace MetaFolderMaker
 {
+/*
+ * Created by Cole Lamers 
+ * Date: 2020-12-22
+ * 
+ * == Purpose ==
+ * This code is to make folders based off file metadata and either copy or move them there 
+ * 
+ * Changes: (date,  comment)
+ * 
+ *              
+ */
+
+    /*
+     * == Global Task List ==
+     * 
+     */
     public partial class MainForm : Form
     {
         DebugLogging debug = new DebugLogging();
         Configuration config = new Configuration();
+        BLLProcessing _bllProcessing;
+
         public MainForm()
         {
             SetupConfigFile.LoadAndSaveFile(ref config);
 
             InitializeComponent();
+
+            _bllProcessing = new BLLProcessing(ref config, ref debug);
 
             cbTagList.Items.AddRange(new string[] { 
                 "Artist", 
@@ -73,7 +93,6 @@ namespace MetaFolderMaker
 
         private void DoProcessing()
         {
-            BLLProcessing _bllProcessing = new BLLProcessing(ref config, ref debug);//TODO: --1-- pass the debug and config through here as arguments to the constructor. then update bllprocessing
             _bllProcessing.StartProcessing();
         }
     }
