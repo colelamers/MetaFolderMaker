@@ -7,16 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="ProjectLogging">
-      <HintPath>B:\Programming\repos\ProjectLogging\bin\Debug\netstandard2.0\ProjectLogging.dll</HintPath>
-    </Reference>
-    <Reference Include="TagLibSharp">
-      <HintPath>B:\Programming\csharplibs\TagLibSharp.dll</HintPath>
-    </Reference>
+    <Folder Include="DAL\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DAL\" />
+    <Reference Include="ProjectLogging">
+      <HintPath>..\ProjectLogging\bin\Debug\netstandard2.0\ProjectLogging.dll</HintPath>
+    </Reference>
+    <Reference Include="TagLibSharp">
+      <HintPath>..\..\csharplibs\TagLibSharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

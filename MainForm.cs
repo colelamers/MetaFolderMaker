@@ -11,17 +11,17 @@ using System.Windows.Forms;
 
 namespace MetaFolderMaker
 {
-/*
- * Created by Cole Lamers 
- * Date: 2020-12-22
- * 
- * == Purpose ==
- * This code is to make folders based off file metadata and either copy or move them there 
- * 
- * Changes: (date,  comment)
- * 
- *              
- */
+    /*
+     * Created by Cole Lamers 
+     * Date: 2020-12-22
+     * 
+     * == Purpose ==
+     * This code is to make folders based off file metadata and either copy or move them there 
+     * 
+     * Changes: (date,  comment)
+     * 
+     *              
+     */
 
     /*
      * == Global Task List ==
@@ -59,8 +59,8 @@ namespace MetaFolderMaker
                 if (fileDialog.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(fileDialog.SelectedPath))
                 {
                     tbSource.Text = fileDialog.SelectedPath;
-                }
-            }
+                } // if
+            } // using
         }
 
         private void btnOutputBrowse_Click(object sender, EventArgs e)
@@ -72,9 +72,9 @@ namespace MetaFolderMaker
                 if (fileDialog.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(fileDialog.SelectedPath))
                 {
                     tbOutput.Text = fileDialog.SelectedPath;
-                }
-            }
-        }
+                } // if
+            } // using
+        } 
 
         private void btnRun_Click(object sender, EventArgs e)
         {
@@ -89,11 +89,11 @@ namespace MetaFolderMaker
             config.Output = tbOutput.Text;
             config.Tag = cbTagList.Text;
             config.FileAction = gbRadioButtons.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Text;
-        }
+        } // function SaveToConfig
 
         private void DoProcessing()
         {
             _bllProcessing.StartProcessing();
-        }
+        } // function DoProcessing
     }
 }

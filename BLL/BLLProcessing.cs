@@ -23,10 +23,11 @@ namespace MetaFolderMaker
 
     /*
      * == Global Task List ==
-     * TODO: --1-- add each folder name to a dictionary and verify if the full value exists. if it does, do not make a new folder and associate that specific file with the other key-pair. ex: usher - yeah; usher ft. akon - bartender. usher would be in the dictionary, and usher ft. akon would contain that value therefore it would be ignored making a new folder.
-     * TODO: --1-- parse for the first regex of text before a "-" assuming that is the artist name. if (artistname != exist), then search that. if "-" does not exist, then grab whole folder name
-     * 
-     * 
+     * TODO: --g-- add each folder name to a dictionary and verify if the full value exists. if it does, do not make a new folder and associate that specific file with the other key-pair. ex: usher - yeah; usher ft. akon - bartender. usher would be in the dictionary, and usher ft. akon would contain that value therefore it would be ignored making a new folder.
+     * TODO: --g-- parse for the first regex of text before a "-" assuming that is the artist name. if (artistname != exist), then search that. if "-" does not exist, then grab whole folder name
+     * TODO: --g-- need to add something in so that if no output path specified, it defaults to the parent path or immediate path
+     * TODO: --g-- need to provide error catching and explaining what is happening
+     * TODO: --g-- add those xml summaries to functions to explain what each bit of the code is doing.
      * 
      */
     public class BLLProcessing
@@ -43,13 +44,14 @@ namespace MetaFolderMaker
             debug = inDebug;
             outputPath = config.Output;
             noArtistPath = $"{outputPath}\\_NOARTIST";
-        }
+        } // BLLProcessing
+
         public void StartProcessing()
         {
             fileItemList.Clear();
             ScanDirectory();
             CreateFolders();
-        }
+        } // function StartProcessing
 
         private void CopyOrMoveFiles(FileItem file, string whatPath)
         {
@@ -63,14 +65,13 @@ namespace MetaFolderMaker
                     case "Copy Files":
                         File.Copy(file.FilePath, whatPath, true);
                         break;
-                }
-            }
+                } // switch
+            } // try
             catch
             {
                 throw;
-
-            }
-        }
+            } // catch
+        } // function CopyOrMoveFiles
 
         private void BuildFolderModifyFiles(FileItem file, string metaDataPulled, string filename)
         {
@@ -88,18 +89,19 @@ namespace MetaFolderMaker
                         Directory.CreateDirectory(newPath);
                     }//Creates a directory if it doesn't exist
                     newPathWithFile = $"{newPath}\\{filename}";
-                }
+                } // if
                 else
                 {
+                    // TODO: --1-- need to have a fully specified pathname here. Otherwise it goes to a default parent.
                     newPathWithFile = $"{noArtistPath}\\{filename}";
-                }
+                } // else
                 CopyOrMoveFiles(file, newPathWithFile);
-            }
+            } // try
             catch
             {
                 throw;
-            }
-        }
+            } // catch
+        } // function BuildFolderModifyFiles
 
         private void CreateFolders()
         {
@@ -123,14 +125,13 @@ namespace MetaFolderMaker
                             BuildFolderModifyFiles(type, type.MetaData.Title, filename);
                             break;
                     }
-                }
+                } // try
                 catch (Exception e)
                 {
                     debug.LogAction($"Error: {e}");
-                }
-            }
-
-        }
+                } // cathc
+            } // foreache
+        } // function CreateFolders
 
         private void ScanDirectory()
         {
@@ -151,20 +152,19 @@ namespace MetaFolderMaker
                     {
                         List<string> filesInDirectory = Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories).ToList();
                         CreateObjectAndFillList(filesInDirectory);
-                    }
-                }//Gets all files in a list of directories
+                    } // foreach
+                } // if; Gets all files in a list of directories
                 else
                 {
                     List<string> filesInPath = Directory.GetFiles(config.Source).ToList();
                     CreateObjectAndFillList(filesInPath);
-                }//Gets all files in a directory that has no subdirectories
-
-            }
+                } // else; Gets all files in a directory that has no subdirectories
+            } // try
             catch (Exception ex)
             {
                 debug.LogAction($"Error: {ex}");
-            }
-        }
+            } // catch
+        } // function ScanDirectory
 
         private void CreateObjectAndFillList(List<string> filesInDirectory)
         {
@@ -183,8 +183,7 @@ namespace MetaFolderMaker
                 item.MetaData = FileData;
 
                 fileItemList.Add(item);
-            }
-        }//Builds Item Objects and adds them to a list
-
-    }
-}
+            } // foreach
+        } // function CreateObjectAndFillList
+    } // BLLProcessing
+} // namespace
