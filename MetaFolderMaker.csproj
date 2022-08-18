@@ -2,21 +2,21 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="DAL\" />
+  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="ProjectLogging">
       <HintPath>B:\Programming\repos\ProjectLogging\bin\Debug\netstandard2.0\ProjectLogging.dll</HintPath>
     </Reference>
     <Reference Include="TagLibSharp">
-      <HintPath>B:\Programming\csharplibs\TagLibSharp.dll</HintPath>
+      <HintPath>..\..\csharplibs\TagLibSharp.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DAL\" />
   </ItemGroup>
 
 </Project>

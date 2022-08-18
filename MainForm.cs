@@ -11,15 +11,44 @@ using System.Windows.Forms;
 
 namespace MetaFolderMaker
 {
+    /*
+     * Created by Cole Lamers 
+     * Date: 2020-12-22
+     * 
+     * == Purpose ==
+     * This code is to make folders based off file metadata and either copy or move them there 
+     * 
+     * Changes: (date,  comment)
+     * 
+     *              
+     */
+
+    /*
+     * == Global Task List ==
+     * TODO: --g1-- bug where if you have a parent directory containing all the files, and you want to copy/move all those files into a child
+     *              directory, it won't work because it ignores scanning the primary/parent directory and just looks for the child.
+     *              current resolution to fix this is, have no path in the output, and just containt he source folder.
+     * TODO: --g2-- bug where if there is no output path, it writes to wherever that program is running. this leads to a problem where you
+     *              do no know where the files are now stored and have to look for them
+     * TODO: --g3-- need to make a check for files and their type. the program throws an error when they are not mp3s. this is because taglib
+     *              only supports mp3s.
+     */
     public partial class MainForm : Form
     {
         DebugLogging debug = new DebugLogging();
         Configuration config = new Configuration();
+        BLLProcessing _bllProcessing;
+
         public MainForm()
         {
-            SetupConfigFile.LoadAndSaveFile(ref config);
-
+            SetupConfigFile.LoadFromFile(ref config);
             InitializeComponent();
+
+
+            //tbSource.Text = "C:\\Users\\Yex\\Desktop\\vaporwave sort with c# app";
+            //tbOutput.Text = "C:\\Users\\Yex\\Desktop\\vaporwave sort with c# app\\SORTED";
+
+            _bllProcessing = new BLLProcessing(ref config, ref debug);
 
             cbTagList.Items.AddRange(new string[] { 
                 "Artist", 
@@ -39,8 +68,8 @@ namespace MetaFolderMaker
                 if (fileDialog.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(fileDialog.SelectedPath))
                 {
                     tbSource.Text = fileDialog.SelectedPath;
-                }
-            }
+                } // if
+            } // using
         }
 
         private void btnOutputBrowse_Click(object sender, EventArgs e)
@@ -52,10 +81,10 @@ namespace MetaFolderMaker
                 if (fileDialog.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(fileDialog.SelectedPath))
                 {
                     tbOutput.Text = fileDialog.SelectedPath;
-                }
-            }
-        }
-
+                } // if
+            } // using
+        } 
+         
         private void btnRun_Click(object sender, EventArgs e)
         {
             SaveToConfig();
@@ -69,12 +98,12 @@ namespace MetaFolderMaker
             config.Output = tbOutput.Text;
             config.Tag = cbTagList.Text;
             config.FileAction = gbRadioButtons.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Text;
-        }
+            ProjectLogging.SetupConfigFile.SaveToFile(ref config);
+        } // function SaveToConfig
 
         private void DoProcessing()
         {
-            BLLProcessing _bllProcessing = new BLLProcessing(ref config, ref debug);//TODO: --1-- pass the debug and config through here as arguments to the constructor. then update bllprocessing
             _bllProcessing.StartProcessing();
-        }
+        } // function DoProcessing
     }
 }
